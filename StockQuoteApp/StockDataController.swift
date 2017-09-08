@@ -31,12 +31,12 @@ class StockDataController: NSObject {
                     //loop over multiple quotes
                     for quote in quotes {
                         
-                        _ = self.addQuote(quote: quote)
+                        _ = self.parseQuote(quote: quote)
                     }
                 }else if let quote = json?["query"]["results"]["quote"].dictionary {
                     //parse one quote
                     
-                    _ = self.addQuote(quote: JSON(quote))
+                    _ = self.parseQuote(quote: JSON(quote))
                 }
                 
                 completion(true)
@@ -56,7 +56,7 @@ class StockDataController: NSObject {
                 //parse one quote
                 if let quote = json?["query"]["results"]["quote"].dictionary {
                     _ = self.removeQuote(symbol: symbol)
-                    let quoteObj = self.addQuote(quote: JSON(quote))
+                    let quoteObj = self.parseQuote(quote: JSON(quote))
                     completion(quoteObj)
                 }
                 
@@ -95,7 +95,11 @@ class StockDataController: NSObject {
         return nil
     }
     
-    func addQuote(quote:JSON) -> StockQuote {
+    func addQuote(quote:StockQuote) {
+        self.stockQuotes.append(quote)
+    }
+    
+    func parseQuote(quote:JSON) -> StockQuote {
         
         let quoteObj = StockQuote(data: quote)
         self.stockQuotes.append(quoteObj)

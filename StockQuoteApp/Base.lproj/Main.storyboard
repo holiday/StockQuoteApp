@@ -67,7 +67,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="TiH-f6-CBM" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" id="2j1-4P-PyR">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="2j1-4P-PyR">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="0.97999999999999998" alpha="1" colorSpace="calibratedWhite"/>
@@ -105,9 +105,9 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="52.39" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="abP-Px-2vd">
-                                <rect key="frame" x="16" y="74" width="120" height="29"/>
+                                <rect key="frame" x="16" y="74" width="203" height="29"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="120" id="9g1-TC-T4z"/>
+                                    <constraint firstAttribute="width" constant="203" id="9g1-TC-T4z"/>
                                     <constraint firstAttribute="height" constant="29" id="DoR-Ng-PwV"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="34"/>

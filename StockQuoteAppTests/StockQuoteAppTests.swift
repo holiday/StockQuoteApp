@@ -24,16 +24,35 @@ class StockQuoteAppTests: XCTestCase {
     }
     
     func testStockQuoteModel() {
-        var jsonString = "{\"quote\":{\"symbol\":\"AMD\",\"LastTradePriceOnly\":\"12.63\",\"Name\":\"Advanced Micro Devices, Inc.\",\"Ask\":\"12.67\",\"AverageDailyVolume\":\"75936704\",\"Bid\":\"12.65\"}}"
-        let json = JSON.parse(jsonString)
-        let quoteData = json["quote"]
-        
-        let quote = StockQuote(data: quoteData)
+        let quote = self.generateQuote(symbol: "AMD")
         
         XCTAssertEqual(quote.getValueForKey(key: "symbol")!, "AMD", "StockQuote model did not find symbol value")
         XCTAssertEqual(quote.getValueForKey(key: "Ask")!, "12.67", "StockQuote model did not find Ask value")
         XCTAssertEqual(quote.getValueForKey(key: "AverageDailyVolume")!, "75936704", "StockQuote model did not find AverageDailyVolume value")
         XCTAssertEqual(quote.getValueForKey(key: "Bid")!, "12.65", "StockQuote model did not find Bid value")
+    }
+    
+    func generateQuote(symbol:String) -> StockQuote {
+        let jsonString = "{\"quote\":{\"symbol\":\"\(symbol)\",\"LastTradePriceOnly\":\"12.63\",\"Name\":\"Advanced Micro Devices, Inc.\",\"Ask\":\"12.67\",\"AverageDailyVolume\":\"75936704\",\"Bid\":\"12.65\"}}"
+        let json = JSON.parse(jsonString)
+        let quoteData = json["quote"]
+        
+        return StockQuote(data: quoteData)
+    }
+    
+    func testAddRemoveQuote() {
+        
+        let sdc = StockDataController.shared
+        
+        let q1 = self.generateQuote(symbol: "AMD")
+        
+        sdc.addQuote(quote: q1)
+        
+        XCTAssertEqual(sdc.stockQuotes.count, 1, "StockDataController did not add quote")
+        
+        let quote = sdc.removeQuote(symbol: "AMD")
+        
+        XCTAssertEqual(quote!.symbol, "AMD", "Quote removed does not have the same symbol")
     }
     
 }
