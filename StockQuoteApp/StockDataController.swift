@@ -31,29 +31,76 @@ class StockDataController: NSObject {
                     //loop over multiple quotes
                     for quote in quotes {
                         
-                        self.addQuote(quote: quote)
+                        _ = self.addQuote(quote: quote)
                     }
                 }else if let quote = json?["query"]["results"]["quote"].dictionary {
                     //parse one quote
                     
-                    self.addQuote(quote: JSON(quote))
+                    _ = self.addQuote(quote: JSON(quote))
                 }
                 
                 completion(true)
                 return
-
                 
             }
             
             completion(false)
+        }
+    }
+    
+    func updateStockQuote(symbol:String, completion: @escaping ((StockQuote?) -> Void)) {
+        Services.shared.getStockData(symbols: [symbol]) { (json, error) in
+            
+            if json != nil {
+                
+                //parse one quote
+                if let quote = json?["query"]["results"]["quote"].dictionary {
+                    _ = self.removeQuote(symbol: symbol)
+                    let quoteObj = self.addQuote(quote: JSON(quote))
+                    completion(quoteObj)
+                }
+                
+                completion(nil)
+                return
+            }
+            
+            completion(nil)
             
         }
     }
     
-    func addQuote(quote:JSON) {
+    func getQuote(symbol:String) -> StockQuote? {
+        for quote in self.stockQuotes {
+            if let quoteSymbol = quote.symbol {
+                if quoteSymbol == symbol {
+                    return quote
+                }
+            }
+        }
+        
+        return nil
+    }
+    
+    func removeQuote(symbol:String) -> StockQuote? {
+        var i = 0
+        for quote in self.stockQuotes {
+            if let quoteSymbol = quote.symbol {
+                if symbol == quoteSymbol {
+                    return self.stockQuotes.remove(at: i)
+                }
+            }
+            i = i + 1
+        }
+        
+        return nil
+    }
+    
+    func addQuote(quote:JSON) -> StockQuote {
         
         let quoteObj = StockQuote(data: quote)
         self.stockQuotes.append(quoteObj)
+        
+        return quoteObj
         
     }
     

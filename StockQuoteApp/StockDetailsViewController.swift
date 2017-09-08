@@ -14,6 +14,7 @@ class StockDetailsViewController: BaseViewController, UITableViewDataSource, UIT
     @IBOutlet weak var stockPriceLabel: UILabel!
     @IBOutlet weak var stockDetailsTableView: UITableView!
     
+    var timer:Timer?
     var stockIndexPath:IndexPath!
     var stockQuote:StockQuote?
     
@@ -49,6 +50,49 @@ class StockDetailsViewController: BaseViewController, UITableViewDataSource, UIT
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { (timer) in
+            print("Updating stock quote \(String(describing: self.stockQuote?.symbol))")
+            self.updateStockQuote()
+        })
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.stopTimer()
+    }
+    
+    func stopTimer() {
+        print("Stopping Stock Details Timer...")
+        self.timer?.invalidate()
+        self.timer = nil
+    }
+    
+    func updateStockQuote() {
+        if let symbol = self.stockQuote?.symbol {
+            StockDataController.shared.updateStockQuote(symbol: symbol, completion: { (stockQuote) in
+                
+                if stockQuote != nil {
+                    self.stockQuote = stockQuote
+                    self.generateDataToDisplay()
+                    self.stockDetailsTableView.reloadData()
+                    
+                    //Update the stock price as well
+                    DispatchQueue.main.async {
+                        if let price = self.stockQuote?.lastTradePriceOnly {
+                            self.stockPriceLabel.text = price
+                        }
+                    }
+                }
+                
+            })
+        }
+        
+    }
+    
     func generateDataToDisplay() {
         
         for key in self.dataToDisplay {
@@ -80,7 +124,14 @@ extension StockDetailsViewController {
         
         DispatchQueue.main.async {
             cell.titleLabel.text = key
+            
+            cell.valueLabel.alpha = 0
             cell.valueLabel.text = self.stockDetails[key]
+            
+            UIView.animate(withDuration: 0.3, animations: { 
+                cell.valueLabel.alpha = 1
+            })
+            
             cell.selectionStyle = UITableViewCellSelectionStyle.none
         }
         
