@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StockDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class StockDetailsViewController: BaseViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var stockSymbolLabel: UILabel!
     @IBOutlet weak var stockPriceLabel: UILabel!

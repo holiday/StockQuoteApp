@@ -18,5 +18,9 @@ class BaseViewController: UIViewController, NVActivityIndicatorViewable  {
         
         NVActivityIndicatorView.DEFAULT_COLOR = UIColor(hexaString: "#4BAE44", alpha: 1.0)
     }
+    
+    deinit {
+        print("\(self) has been deinitialized...")
+    }
 
 }
